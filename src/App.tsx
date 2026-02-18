@@ -10,6 +10,7 @@ import * as goodsAPI from './api/goods';
 
 export const App: React.FC = () => {
   const [goods, setGoods] = useState<Good[]>([]);
+  const [error, setError] = useState('');
 
   return (
     <div className="App">
@@ -18,7 +19,13 @@ export const App: React.FC = () => {
       <button
         type="button"
         data-cy="all-button"
-        onClick={() => goodsAPI.getAll().then(setGoods)}
+        onClick={() => {
+          setError('');
+          goodsAPI
+            .getAll()
+            .then(setGoods)
+            .catch(() => setError('Unable to load goods'));
+        }}
       >
         Load all goods
       </button>
@@ -26,7 +33,13 @@ export const App: React.FC = () => {
       <button
         type="button"
         data-cy="first-five-button"
-        onClick={() => goodsAPI.get5First().then(setGoods)}
+        onClick={() => {
+          setError('');
+          goodsAPI
+            .get5First()
+            .then(setGoods)
+            .catch(() => setError('Unable to load goods'));
+        }}
       >
         Load 5 first goods
       </button>
@@ -34,11 +47,18 @@ export const App: React.FC = () => {
       <button
         type="button"
         data-cy="red-button"
-        onClick={() => goodsAPI.getRedGoods().then(setGoods)}
+        onClick={() => {
+          setError('');
+          goodsAPI
+            .getRedGoods()
+            .then(setGoods)
+            .catch(() => setError('Unable to load goods'));
+        }}
       >
         Load red goods
       </button>
 
+      {error && <p>{error}</p>}
       <GoodsList goods={goods} />
     </div>
   );
